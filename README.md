@@ -18,13 +18,6 @@
 |---------------|--------------|------------------|----------|--------------|
 | HTML, CSS, JS | Flask (Python) | RandomForest / XGBoost | SQLite   | sessionStorage, API integration |
 
-## 📸 Screenshots
-
-_Add screenshots here if available:_
-- Landing Page
-- Prediction Result Page
-- Patient Dashboard
-- Doctor Dashboard
 
 ## 🧪 Prediction Flow
 
