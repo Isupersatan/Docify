@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %} login {% endblock title %}
+{% block body %}
+    <main class="signin-as-section">
+        <div class="signin-box">
+            <h1>Sign-In As</h1>
+            <div class="signin-options">
+                <div id="admin-option" class="signin-option">
+                    <img src="{{url_for('static',filename='img/boss.png')}}" alt="Admin" />
+                    <p>Admin</p>
+                </div>
+                <div id="doctor-option" class="signin-option">
+                    <img src="{{url_for('static',filename='img/Reception.png')}}" alt="Doctor" />
+                    <p>Doctor</p>
+                </div>
+                <div id="patient-option" class="signin-option">
+                    <img src="{{url_for('static',filename='img/patient.jpeg')}}" alt="Patient" />
+                    <p>Patient</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script >
+        // Function to handle redirection
+function redirectToSignIn(role) {
+    console.log(`Redirecting to signin as ${role}`);
+    window.location.href ="{{url_for('signin')}}";
+}
+function redirectToadmin(ro) {
+    console.log(`Redirecting to signin as ${ro}`);
+    window.location.href = "{{url_for('admin')}}";
+}
+
+// Attach event listeners to each sign-in option and admin option
+document.getElementById('admin-option').addEventListener('click', () => redirectToadmin('Admin'));
+document.getElementById('doctor-option').addEventListener('click', () => redirectToSignIn('Doctor'));
+document.getElementById('patient-option').addEventListener('click', () => redirectToSignIn('Patient'));
+
+    </script>
+{% endblock body %}

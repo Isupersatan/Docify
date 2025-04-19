@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %} signup {% endblock title %}
+{% block body %}
+    <div class="container">
+        <div class="form-box">
+            <h1 id="title">Sign Up</h1>
+            <form action="/signup" method="post">
+                <div class="input-group">
+                    <!-- Name Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Name" name="name" required>
+                    </div>
+                    <!-- Email Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" placeholder="Email" name="email" required>
+                    </div>
+                    <!-- Password Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password" required>
+                    </div>
+                    <!-- Gender Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-venus-mars"></i>
+                        <select name="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <!-- Role Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-user-md"></i>
+                        <select name="role" required>
+                            <option value="" disabled selected>Sign Up as</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">Patient</option>
+                        </select>
+                    </div>
+                    <!-- DOB Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-calendar"></i>
+                        <input type="date" placeholder="Date of Birth" name="DOB" required>
+                    </div>
+                    
+                </div>
+                <div class="btn-field">
+                    <button type="submit" id="submitBtn" >Submit</button>
+                    <button type="button" id="signinBtn" class="disable">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+
+        // JavaScript for toggling between Sign Up and Sign In
+        //let signupBtn = document.getElementById("signupBtn");
+        let signinBtn = document.getElementById("signinBtn");
+
+        // Redirect to signin.html on Sign In button click
+        signinBtn.onclick = function () {
+            window.location.href = "{{url_for('signin')}}";
+        };
+
+         submitBtn.onclick = function () {
+            window.location.href = "{{url_for('signin')}}";
+        };
+    </script>
+{% endblock body %}

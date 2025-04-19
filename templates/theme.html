@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docify</title>
+    <link rel="stylesheet" href="{{url_for('static' , filename='css/style.css')}}">
+</head>
+<body>
+    <video id="video" autoplay loop muted>
+        <source src="{{url_for('static',filename='img/open.mp4')}}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        // Set a timeout to automatically close the page after the video starts playing
+        setTimeout(function() {
+            window.location.href = "{{url_for('index')}}"; // Redirect to index.html after the timeout
+        }, {{2000}}); // 5000 milliseconds = 5 seconds (adjust as needed)
+    </script>
+</body>
+</html>

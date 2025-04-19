@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Admin Profile{% endblock title %}
+
+{% block body %}
+<div class="admin-profile">
+    <div class="profile-container1">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-img-box">
+                <img src="{{ url_for('static', filename='img/boss.png') }}" alt="Admin" class="profile-img">
+            </div>
+            <h1 class="admin-name">Admin Dashboard</h1>
+            <p class="admin-welcome">
+    Welcome, <strong>Admin!</strong> Take charge of the platform, streamline operations, and shape the future of healthcare with innovation and care. 🌟
+</p>
+
+        </div>
+
+        <!-- Future Plans Section -->
+        <div class="future-section">
+            <h2 class="section-title">🚀 Our Vision & Upcoming Features</h2>
+
+            <!-- Enhancements -->
+            <div class="future-block">
+                <h3>🩺 Platform Enhancements</h3>
+                <ul>
+                    <li><strong>💬 Chat with Doctors & Patients:</strong> Secure, real-time messaging system for better communication.</li>
+                    <li><strong>🛠️ Issue Tracker:</strong> Admin panel to view, manage, and resolve platform-related issues.</li>
+                    <li><strong>📅 Smart Appointment Handling:</strong> Streamlined scheduling system with status tracking and notifications.</li>
+                    <li><strong>📈 Analytics Dashboard:</strong> Gain insights into user engagement, health trends, and doctor performance.</li>
+                </ul>
+            </div>
+
+            <!-- Business Goals -->
+            <div class="future-block">
+                <h3>🏢 Business Expansion</h3>
+                <ul>
+                    <li><strong>🏥 Hospital Partnerships:</strong> Collaborate with leading hospitals and clinics to grow our network.</li>
+                    <li><strong>🌐 Regional Expansion:</strong> Introduce multilingual support and regional customization.</li>
+                    <li><strong>📱 Mobile App Launch:</strong> Build cross-platform apps for accessibility and convenience.</li>
+                    <li><strong>🤖 AI Doctor Recommendations:</strong> Smart algorithms for personalized healthcare matching.</li>
+                </ul>
+            </div>
+
+            <!-- Long-Term Vision -->
+            <div class="future-block">
+                <h3>🌟 Long-Term Vision</h3>
+                <ul>
+                    <li><strong>🧠 Predictive Diagnosis:</strong> Use AI for early disease prediction and health recommendations.</li>
+                    <li><strong>🌍 Remote Healthcare:</strong> Expand access through telemedicine and digital consultations.</li>
+                    <li><strong>🔐 Data Privacy First:</strong> Ensure full HIPAA compliance and secure handling of sensitive data.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+    .profile-img-box {
+        margin: 0 auto;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #007bff;
+    }
+
+    .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+</style>
+{% endblock body %}

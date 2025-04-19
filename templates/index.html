@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock title %}
+{% block body %}
+    <main class="hero-section">
+        <h1>Be your own doctor...</h1>
+        <p>
+            It might have happened so many times that you or someone yours need doctor’s help
+            immediately, but they are not available due to some reasons. The Disease Prediction system
+            is an end user support and online consultation project. Here, we propose a web application
+            that allows users to get instant guidance on their disease through an intelligent system.
+            The application is fed with various details and the disease associated with those details.
+            The application allows users to share their disease-related issues. It then processes user-specific
+            details to check for various illnesses that could be associated with it. Here we use some intelligent
+            data mining techniques to guess the most accurate illness that could be associated with patient’s
+            details. Based on result, patient can contact doctor accordingly for further treatment.
+        </p>
+        <button id="getStartedBtn" class="btn">Get started</button>
+    </main>
+
+    <script>
+        // Define the button variable by selecting the element by its id
+        let btn = document.getElementById("getStartedBtn");
+
+        // Add an onclick event to redirect the user to the signup page
+        btn.onclick = function () {
+            window.location.href = "{{url_for('login')}}";
+        };
+    </script>
+{% endblock body %}

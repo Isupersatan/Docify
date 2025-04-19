@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block title %} patient {% endblock title %}
+{% block body %}
+       <div class ="profile">
+<div class="profile-container">
+
+    <!-- Circle Box (Profile Picture and Name) -->
+    <div class="circle-box">
+        <div class="profile-picture">
+            <img src="{{ url_for('static', filename='img/patient.jpeg') }}" alt="Patient" class="profile-img">
+        </div>
+        <h1 class="p">Patient Name</h1>
+        <h2 class="profile-name">{{ patient.p_name }}</h2> <!-- Name below the profile picture -->
+    </div>
+
+    <!-- Profile Box (Details and Buttons) -->
+    <div class="profile-box">
+        <!-- Profile Details -->
+        <div class="profile-details">
+            <div class="detail-item">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value">{{ patient.p_email }}</span>
+            </div>
+<!--            <div class="detail-item">-->
+<!--                <span class="detail-label">Phone No:</span>-->
+<!--                <span class="detail-value">{{ patient.phone }}</span>-->
+<!--            </div>-->
+            <div class="detail-item">
+                <span class="detail-label">Age:</span>
+                <span class="detail-value">{{  patient.p_age }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Date of Birth:</span>
+                <span class="detail-value">{{  patient.p_dob }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Height:</span>
+                <span class="detail-value">{{ patient.height }} cm</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Weight:</span>
+                <span class="detail-value">{{ patient.weight }} kg</span>
+            </div>
+        </div>
+</div>
+        <!-- Buttons on the Side -->
+        <div class="side-buttons">
+            <button class="btm report-btn" onclick="window.location.href='{{ url_for('view_report', patient_email=current_user.email) }}'">
+    View Medical Report
+            </button>
+            <button class="btm edit-btn" onclick="openEditModal()">Edit Profile</button>
+        </div>
+    </div>
+
+
+<!-- Additional Options Box -->
+<div class="options-box">
+    <button class="btm disease-btn" onclick="openDiseaseModal()">Check Disease</button>
+<!--    <button class="btm history-btn">View Consultation History</button>-->
+<!--    <button class="btm feedback-btn">Give Feedback</button>-->
+<!--    <button class="btm chat-btn">Chat with Doctor</button>-->
+</div>
+
+<!-- Edit Profile Modal -->
+<div id="editProfileModal" class="modal hidden">
+    <div class="modal-content">
+        <!-- Close Button (Cross Icon) -->
+        <span class="close" onclick="closeEditModal()">&times;</span>
+
+        <h2>Edit Profile</h2>
+        <form id="editProfileForm" action="{{ url_for('update_patient') }}" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="p_name">Name:</label>
+                <input type="text" id="p_name" name="p_name" value="{{ patient.p_name }}" required>
+            </div>
+
+           <div class="form-group">
+                <label for="p_age">Age:</label>
+                <input type="number" id="p_age" name="p_age" value="{{ patient.p_age }}" required>
+           </div>
+<!--            <div class="form-group">-->
+<!--                <label for="phone">Phone:</label>-->
+<!--                <input type="text" id="phone" name="phone" value="{{ patient.phone }}" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="email">Email:</label>-->
+<!--                <input type="email" id="email" name="email" value="{{ patient.email }}" required>-->
+<!--            </div>-->
+            <div class="form-group">
+                <label for="p_dob">Date of Birth:</label>
+                <input type="date" id="p_dob" name="p_dob" value="{{ patient.p_dob }}" required>
+            </div>
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" step="0.1" id="height" name="height" value="{{ patient.height }}" required>
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" step="0.1" id="weight" name="weight" value="{{ patient.weight }}" required>
+            </div>
+
+           <div class="form-group">
+                <label for="medical_report">Medical Report:</label>
+                <input type="file" id="medical_report" name="medical_report" accept=".pdf,.doc,.docx,.jpg,.png">
+                {% if patient.report_filename %}
+                    <p>Current report: {{ patient.report_filename }}</p>
+                {% endif %}
+            </div>
+
+            <input type="hidden" name="p_email" value="{{ current_user.email }}">
+            <button type="submit" class="btm">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+<!-- Disease List Modal -->
+<div id="diseaseModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close" onclick="closeDiseaseModal()">&times;</span>
+        <h2>Select a Disease</h2>
+        <div class="disease-list">
+            <button class="disease-item" onclick="selectDisease('Heart Diseases')">Heart Diseases</button>
+<!--            <button class="disease-item" onclick="selectDisease('PCOD')">PCOD</button>-->
+<!--            <button class="disease-item" onclick="selectDisease('Diabetes')">Diabetes</button>-->
+<!--            <button class="disease-item" onclick="selectDisease('Kidney')">Kidney</button>-->
+<!--            <button class="disease-item" onclick="selectDisease('Parkinson\'s')">Parkinson's</button>-->
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+
+
+<script>
+// Open Edit Profile Modal
+function openEditModal() {
+    document.getElementById('editProfileModal').style.display = 'flex';
+}
+
+// Close Edit Profile Modal
+function closeEditModal() {
+    document.getElementById('editProfileModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const editModal = document.getElementById('editProfileModal');
+    if (event.target === editModal) {
+        closeEditModal();
+    }
+};
+
+// Open Disease Modal
+function openDiseaseModal() {
+    document.getElementById('diseaseModal').style.display = 'flex';
+}
+
+// Close Disease Modal
+function closeDiseaseModal() {
+    document.getElementById('diseaseModal').style.display = 'none';
+}
+
+// Handle Disease Selection
+function selectDisease(disease) {
+    alert(`You selected: ${disease}`); // Replace this with your logic
+    closeDiseaseModal(); // Close the modal after selection
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const diseaseModal = document.getElementById('diseaseModal');
+    if (event.target === diseaseModal) {
+        closeDiseaseModal();
+    }
+};
+
+// Close Edit Profile Modal
+function closeEditModal() {
+    document.getElementById('editProfileModal').style.display = 'none';
+}
+
+function selectDisease(disease) {
+    if (disease === "Heart Diseases") {
+        onclick=window.location.href="{{url_for('heart')}}";
+    } else {
+        console.log("Selected Disease: " + disease);
+        // Handle other diseases
+    }
+}
+
+</script>
+{% endblock body %}

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block title %}Low Risk Heart Disease{% endblock title %}
+
+{% block body %}
+<style>
+        @media print {
+            .navbar, .specialists, .no-print {
+                display: none !important;
+            }
+        }
+
+    .doctor-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .patient-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .booking-btn .spinner {
+            display: none;
+        }
+
+        .booking-btn.loading .btn-text {
+            display: none;
+        }
+
+        .booking-btn.loading .spinner {
+            display: inline-block;
+        }
+</style>
+
+<div class="container5">
+    <div class="risk-level alert alert-success">
+        <p><strong>Your Risk Level:</strong> <span class="badge bg-success">{{ risk_level }}</span></p>
+        <p><strong>Probability:</strong> {{ probability }}%</p>
+    </div>
+
+    <div class="alert alert-info mt-3">
+        <p>{{ message }}</p>
+    </div>
+
+    <h1>🌿 Heart Health Advisory 🌿</h1>
+    <div class="message">
+        <p><strong>Good news!</strong> Your assessment shows a {{ risk_level.lower() }} risk of heart disease ({{ probability }}% probability).</p>
+        <p>While your risk is low, maintaining heart-healthy habits is important for long-term wellness.</p>
+    </div>
+
+    <button class="btm bton-success no-print" onclick="window.print()">
+        <i class="fas fa-print me-2"></i>Print Results
+    </button>
+
+    <h2 class="mt-4">💖 Recommended Heart Specialists 💖</h2>
+
+        <div class="specialists" id="doctor-list">
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading doctors...</span>
+                </div>
+                <p>Loading recommended cardiologists...</p>
+            </div>
+        </div>
+    <div id="patient-info-container" class="mt-4"></div>
+    <div id="booking-errors"></div>
+
+    <div class="message mt-4">
+        <p>💡 <strong>Heart health is a lifelong journey.</strong> A balanced diet, regular physical activity, and mindfulness can keep your heart strong and resilient.</p>
+        <p>Stay positive, stay informed, and always put your health first. We wish you a vibrant and healthy life ahead! 💙</p>
+    </div>
+
+   <div class="actions mt-4 no-print">
+            <button class="btn btn-secondary" onclick="goToHeart()">
+                <i class="fas fa-redo me-2"></i>Retake Assessment
+            </button>
+        </div>
+    </div>
+
+<script>
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    function goToHeart() {
+        window.location.href = "/heart";
+    }
+
+    async function bookAppointment(doctorEmail, buttonElement) {
+        const btn = buttonElement;
+        const originalContent = btn.innerHTML;
+        const spinner = btn.querySelector('.spinner');
+        const btnText = btn.querySelector('.btn-text');
+
+        try {
+            // Set loading state
+            btn.disabled = true;
+            if (spinner) spinner.style.display = 'inline-block';
+            if (btnText) btnText.style.display = 'none';
+
+            const response = await fetch('/book_appointment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    doctor_email: doctorEmail
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || 'Booking failed');
+            }
+
+            // ✅ Doctor name from backend (ensure it's included!)
+            const doctorName = result.doctor_name || 'Doctor'; // Fallback to generic
+
+            // Update button
+            btn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Booked!';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-success');
+
+            // ✅ Show confirmation
+            showAppointmentConfirmation(result.doctor_name, doctorEmail);
+
+        } catch (error) {
+            console.error('Booking error:', error);
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+
+            document.getElementById('booking-errors').innerHTML = `
+                <div class="alert alert-danger mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    ${error.message}
+                </div>
+            `;
+        } finally {
+            // Always restore spinner state
+            if (spinner) spinner.style.display = 'none';
+            if (btnText) btnText.style.display = 'inline-block';
+        }
+    }
+
+    function showAppointmentConfirmation(doctorName, doctorEmail) {
+        const container = document.getElementById('patient-info-container');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="alert alert-success mt-4">
+                <h4><i class="fas fa-calendar-check me-2"></i> Appointment Booked!</h4>
+                <p><strong>With:</strong> ${doctorName} (${doctorEmail})</p>
+                <p class="mb-0">You will receive a confirmation email shortly.</p>
+            </div>
+        `;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        async function fetchDoctors() {
+            try {
+                const response = await fetch('/api/doctors?specialty=cardiology');
+                const doctors = await response.json();
+                const doctorList = document.getElementById('doctor-list');
+
+                doctorList.innerHTML = doctors.map(doctor => `
+                    <div class="doctor-card">
+                        <h3>${doctor.d_name}</h3>
+                        <p><i class="fas fa-stethoscope me-2"></i> ${doctor.specialist}</p>
+                        <p><i class="fas fa-envelope me-2"></i> ${doctor.d_email}</p>
+
+                        <button class="btn btn-primary booking-btn mt-3"
+                                onclick="bookAppointment('${doctor.d_email}', this)">
+                            <span class="btn-text">
+                                <i class="fas fa-calendar-plus me-2"></i> Book Appointment
+                            </span>
+                            <span class="spinner spinner-border spinner-border-sm" role="status" style="display:none;"></span>
+                        </button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('doctor-list').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Failed to load doctors: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        fetchDoctors();
+    });
+
+
+
+</script>
+{% endblock body %}

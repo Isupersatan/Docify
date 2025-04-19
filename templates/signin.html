@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %} signin {% endblock title %}
+{% block body %}
+    <div class="container">
+        <div class="form-box">
+            <h1 id="title">Sign In</h1>
+            <form action="{{ url_for('signin') }}" method="POST">
+                <div class="input-group">
+                    <!-- Role Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-user-md"></i>
+                        <select name="role" required>
+                            <option value="" disabled selected>Sign In as</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">Patient</option>
+                        </select>
+                    </div>
+                    <!-- Email Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" placeholder="Email" name="email" required>
+                    </div>
+                    <!-- Password Field -->
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password" required>
+                    </div>
+                    <p>Lost password? <a href="#">Click Here</a></p>
+                </div>
+                <div class="btn-field">
+                    <button type="submit" id="signinBtn">Submit</button>
+                    <button type="button" id="signupBtn" class="disable">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // JavaScript for toggling between Sign In and Sign Up
+        let signupBtn = document.getElementById("signupBtn");
+        let signinBtn = document.getElementById("signinBtn");
+
+        signupBtn.onclick = function () {
+            window.location.href = "{{url_for('signup')}}"; // Redirects to the signup page
+        };
+    </script>
+{% endblock body %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}  {% endblock title %}
+{% block body %}
+       <div class="container1">
+        <div class="content">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-picture">
+                    <img src="../static/img/Reception.png" alt="Doctor">
+                </div>
+                <div class="profile-details">
+                    <p><strong>Patient Name:</strong>Dr. Rahul</p>
+                    <p><strong>Patient ID:</strong> 2</p>
+                    <p><strong>Patient Email:</strong> rahul@gmail.com</p>
+                    <button class="view-profile">View Profile</button>
+                </div>
+            </div>
+
+            <!-- Options Box -->
+            <div class="options">
+                <h2>Doctor Profile</h2>
+                <button>View Consultation History</button>
+                <button>View Patient Profie</button>
+                <button>Give Feedback</button>
+                <button>Chat with Patient</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
