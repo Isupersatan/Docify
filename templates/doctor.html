@@ -1,30 +1,232 @@
 {% extends 'base.html' %}
-{% block title %}  {% endblock title %}
-{% block body %}
-       <div class="container1">
-        <div class="content">
-            <!-- Profile Card -->
-            <div class="profile-card">
-                <div class="profile-picture">
-                    <img src="../static/img/Reception.png" alt="Doctor">
-                </div>
-                <div class="profile-details">
-                    <p><strong>Patient Name:</strong>Dr. Rahul</p>
-                    <p><strong>Patient ID:</strong> 2</p>
-                    <p><strong>Patient Email:</strong> rahul@gmail.com</p>
-                    <button class="view-profile">View Profile</button>
-                </div>
-            </div>
 
-            <!-- Options Box -->
-            <div class="options">
-                <h2>Doctor Profile</h2>
-                <button>View Consultation History</button>
-                <button>View Patient Profie</button>
-                <button>Give Feedback</button>
-                <button>Chat with Patient</button>
+{% block title %}Doctor Profile{% endblock title %}
+
+{% block body %}
+<style>
+    /* Add these styles to your existing CSS */
+    .appointment-confirmation {
+        background-color: #f8f9fa;
+        border-left: 4px solid #28a745;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 5px;
+    }
+
+    .patient-details p {
+        margin: 8px 0;
+    }
+
+    .debug-info {
+        background-color: #fff3cd;
+        padding: 10px;
+        margin: 10px 0;
+        border-left: 4px solid #ffc107;
+        font-family: monospace;
+    }
+</style>
+<div class="profil">
+    <div class="profile-container">
+        <!-- Circle Box (Profile Picture and Name) -->
+        <div class="circle-box">
+            <div class="profile-picture">
+                <img src="{{ url_for('static', filename='img/reception.png') }}" alt="Doctor" class="profile-img">
             </div>
+            <h1 class="p">Doctor Profile</h1>
+            <h2 class="profile-name">{{ doctor.d_name }}</h2>
+            {% if doctor.rating %}
+            <div class="rating mt-2">
+                {% for i in range(1,6) %}
+                    <i class="fas fa-star {{ 'text-warning' if i <= doctor.rating|round else 'text-secondary' }}"></i>
+                {% endfor %}
+                <span class="text-muted ms-2">{{ doctor.rating|round(1) }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Profile Box (Details and Buttons) -->
+        <div class="profile-box">
+            <div class="profile-details">
+                <div class="detail-item">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">{{ doctor.d_email }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Age:</span>
+                    <span class="detail-value">{{ doctor.d_age }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date of Birth:</span>
+                    <span class="detail-value">{{ doctor.d_dob }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Specialist:</span>
+                    <span class="detail-value">{{ doctor.specialist }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons on the Side -->
+        <div class="side-buttons">
+            {% if booked %}
+            <button class="btm report-btn" disabled>
+                <i class="fas fa-check-circle me-2"></i>Appointment Booked
+            </button>
+            {% endif %}
+            <button class="btm edit-btn" onclick="openEditModal()">
+                <i class="fas fa-edit me-2"></i>Edit Profile
+            </button>
         </div>
     </div>
 
+    <!-- Additional Options Box -->
+
+
+<div class="options-box">
+   <button class="btm cirtififate-btn" onclick="viewCertificate('{{ doctor.d_email }}')">View Your Certificate</button>
+    <button class="btm history-btn">View Consultation History</button>
+    <button class="btm feedback-btn">Give Feedback</button>
+    <button class="btm chat-btn">Chat with Patient</button>
+</div>
+
+
+    <!-- Debug Output - Now visible by default for testing -->
+  <!--  <div class="debug-info">
+        <h4>Debug Information:</h4>
+        <p><strong>Booked Status:</strong> {{ booked }}</p>
+        <p><strong>Patient Exists:</strong> {{ patient is not none }}</p>
+        {% if patient %}
+        <p><strong>Patient Data:</strong> {{ patient.p_name }} ({{ patient.p_email }})</p>
+        {% endif %}
+        <p><strong>URL Parameters:</strong> {{ request.args }}</p>
+    </div>
+-->
+    <!-- Enhanced Appointment Confirmation -->
+    {% if booked and patient %}
+    <div class="appointment-confirmation">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3><i class="fas fa-calendar-check me-2"></i> Appointment Confirmed</h3>
+            <span class="badge bg-success">New</span>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h4><i class="fas fa-user me-2"></i> Patient Details</h4>
+                <div class="patient-details">
+                    <p><strong>Name:</strong> {{ patient.p_name }}</p>
+                    <p><strong>Email:</strong> {{ patient.p_email }}</p>
+                    <p><strong>Age:</strong> {{ patient.p_age }}</p>
+                    {% if patient.weight %}
+                    <p><strong>Weight:</strong> {{ patient.weight }} kg</p>
+                    {% endif %}
+                    {% if patient.height %}
+                    <p><strong>Height:</strong> {{ patient.height }} cm</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4><i class="fas fa-clock me-2"></i> Appointment Time</h4>
+                <p>Today at {{ now().strftime('%I:%M %p') }}</p>
+
+                <div class="mt-3">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-envelope me-2"></i> Send Reminder
+                    </button>
+                    <button class="btn btn-outline-secondary ms-2">
+                        <i class="fas fa-print me-2"></i> Print Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm" action="{{ url_for('update_doctor') }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="d_email" value="{{ doctor.d_email }}">
+
+                <div class="form-group">
+                    <label for="d_name">Name:</label>
+                    <input type="text" id="d_name" name="d_name" value="{{ doctor.d_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="d_age">Age:</label>
+                    <input type="number" id="d_age" name="d_age" value="{{ doctor.d_age }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="d_dob">Date of Birth:</label>
+                    <input type="date" id="d_dob" name="d_dob" value="{{ doctor.d_dob }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="specialist">Specialist:</label>
+                    <input type="text" id="specialist" name="specialist" value="{{ doctor.specialist }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="license_file">Upload License:</label>
+                    <input type="file" id="license_file" name="license_file" accept=".pdf,.jpg,.png,.jpeg">
+                    {% if doctor.license_path %}
+                    <small class="text-muted">Current file: {{ doctor.license_path.split('/')[-1] }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="photo_file">Upload Degree Certificate:</label>
+                    <input type="file" id="photo_file" name="photo_file" accept=".jpg,.png,.jpeg">
+                    {% if doctor.photo_path %}
+                    <small class="text-muted">Current file: {{ doctor.photo_path.split('/')[-1] }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btm edit-btn">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                    <button type="button" class="btm btn-secondary ms-2" onclick="closeEditModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEditModal() {
+    document.getElementById('editProfileModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal() {
+    document.getElementById('editProfileModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function viewCertificate(doctorEmail) {
+    window.open(`/view_photo/${doctorEmail}`, '_blank');
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('editProfileModal');
+    if (event.target === modal) {
+        closeEditModal();
+    }
+};
+
+document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'csrf_token';
+    input.value = csrfToken;
+    this.appendChild(input);
+});
+</script>
 {% endblock body %}

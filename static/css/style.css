@@ -8,17 +8,19 @@ body {
 }
 
 /* Fullscreen video */
-#video {
+#video{
     width: 100%;
     height: 100vh;
-    object-fit: cover;
+    object-fit: cover; /* Ensures the video covers the full viewport */
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: absolute; /* Makes sure video stays at the background */
     top: 0;
     left: 0;
 }
+
+/* Navbar (index.html) */
 
 /* Navbar Styling */
 .navbar {
@@ -35,6 +37,7 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
+/* Logo Styling */
 .navbar .logo {
     font-size: 1.8rem;
     font-weight: bold;
@@ -49,6 +52,7 @@ body {
     color: #ffdd00;
 }
 
+/* Navbar Menu */
 .navbar ul {
     list-style: none;
     display: flex;
@@ -56,11 +60,13 @@ body {
     padding: 0;
 }
 
+/* Navbar Links */
 .navbar ul li {
     margin: 0 1rem;
     position: relative;
 }
 
+/* Link Styling */
 .navbar ul li a {
     color: white;
     text-decoration: none;
@@ -70,11 +76,13 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
+/* Hover Effect - Neon Glow */
 .navbar ul li a:hover {
     color: #ffdd00;
     text-shadow: 0 0 5px #ffdd00, 0 0 10px #ffdd00;
 }
 
+/* Fancy Underline Effect */
 .navbar ul li a::after {
     content: "";
     position: absolute;
@@ -90,7 +98,6 @@ body {
 .navbar ul li a:hover::after {
     width: 100%;
 }
-
 /* Hero Section */
 .hero-section {
     width: 100%;
@@ -134,13 +141,14 @@ body {
 .hero-section .btn:hover {
     background-color: #3300ff;
     transform: scale(1.05);
+    
 }
 
-/* Container and Form Styling for Login/Signup */
+/* Container and Form Styling for Login/Signup (login.html) */
 .container {
     width: 100%;
     height: 100vh;
-    background-image: linear-gradient(rgba(0, 0, 50, 0.6), rgba(0, 0, 50, 0.6)), url(../img/background.png);
+    background-image: linear-gradient(rgba(0, 0, 50, 0.6), rgba(0, 0, 50, 0.6)), url(../img/teth.jpg);
     background-position: center;
     background-size: cover;
     display: flex;
@@ -256,16 +264,18 @@ body {
     cursor: pointer;
 }
 
-/* Sign-in As Section */
+
+/* "Sign-in As" Section */
 .signin-as-section {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4); /* Transparent overlay with slight darkening */
+    overflow: hidden; /* Prevents scrollbars */
 }
 
+/* Sign-in Box */
 .signin-box {
     background: none;
     padding: 3rem;
@@ -281,19 +291,33 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    animation: fadeIn 1.5s ease-out;
+    animation: fadeIn 1.5s ease-out; /* Smooth fade-in animation */
 }
 
+/* Animation for Fade-In Effect */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header Text Styling */
 .signin-box h1 {
     font-size: 2.5rem;
     color: #fff;
     margin-bottom: 1.5rem;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Bold shadow for readability */
     font-weight: bold;
     letter-spacing: 1px;
-    animation: slideIn 1.2s ease-in-out;
+    animation: slideIn 1.2s ease-in-out; /* Slide-in effect */
 }
 
+/* Animation for Slide-In Effect */
 @keyframes slideIn {
     0% {
         transform: translateY(-50px);
@@ -305,6 +329,7 @@ body {
     }
 }
 
+/* Sign-in Options Layout */
 .signin-options {
     display: flex;
     justify-content: space-around;
@@ -313,6 +338,7 @@ body {
     margin-top: 3rem;
 }
 
+/* Individual Option Styling */
 .signin-option {
     display: flex;
     flex-direction: column;
@@ -321,11 +347,12 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
     padding: 1.5rem;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(5px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.7); /* Slight background for better visibility */
+    backdrop-filter: blur(5px); /* Adding blur effect */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); /* Shadow for depth */
 }
 
+/* Icon Styling */
 .signin-option img {
     width: 90px;
     height: 90px;
@@ -337,12 +364,14 @@ body {
     transition: transform 0.3s ease;
 }
 
+/* Hover Effects on Sign-in Options */
 .signin-option:hover {
     transform: scale(1.1);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    filter: brightness(1.2);
+    filter: brightness(1.2); /* Brighten on hover */
 }
 
+/* Option Text Styling */
 .signin-option p {
     font-size: 1.2rem;
     font-weight: bold;
@@ -351,9 +380,11 @@ body {
     transition: color 0.3s ease;
 }
 
+/* Hover Effect on Text */
 .signin-option:hover p {
-    color: #5c33ff;
+    color: #5c33ff; /* Change text color on hover */
 }
+
 
 /* Gender and Role Styling */
 .input-field.gender-role {
@@ -380,18 +411,21 @@ body {
     background-color: #eaeaea;
 }
 
-/* Patient Profile Styles */
-.profil {
-    font-family: 'Poppins', sans-serif;
+/*patient*/
+
+
+/* General Styles */
+.profil{
+    font-family: 'Poppins', sans-serif; /* Modern font */
     margin: 0;
     padding: 0;
-    background-image: url(../img/DNA.gif);
+    background-image: url(../img/DNA.gif); /* Add your GIF path here */
     background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    min-height: 100vh;
-    color: #333;
+    background-size: cover; /* Ensure the GIF covers the entire page */
+    background-repeat: no-repeat; /* Prevent the GIF from repeating */
+    background-attachment: fixed; /* Keep the background fixed while scrolling */
+    min-height: 100vh; /* Ensure the body covers the full viewport height */
+    color: #333; /* Default text color */
 }
 
 .profile-container {
@@ -400,35 +434,36 @@ body {
     justify-content: center;
     gap: 20px;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 20px;
-    margin: 20px auto;
-    max-width: 1200px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for readability */
+    border-radius: 20px; /* Rounded corners for the container */
+    margin: 20px auto; /* Center the container */
+    max-width: 1200px; /* Limit the width of the container */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
+/* Circle Box (Profile Picture and Name) */
 .circle-box {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft shadow */
     padding: 30px;
-    width: 250px;
-    height: 450px;
+    width: 250px; /* Wider box */
+    height: 450px; /* Increased height for the box */
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    color: white; /* White text for contrast */
 }
 
 .profile-picture {
-    width: 150px;
+    width: 150px; /* Increased size for the profile picture */
     height: 150px;
-    border-radius: 50%;
+    border-radius: 50%; /* Circular image */
     overflow: hidden;
-    margin-bottom: 20px;
-    border: 4px solid white;
+    margin-bottom: 20px; /* Space between picture and name */
+    border: 4px solid white; /* White border around the picture */
 }
 
 .profile-img {
@@ -438,35 +473,42 @@ body {
 }
 
 .profile-name {
-    font-size: 24px;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    margin: 10px 0 0;
-    transition: transform 0.3s ease, color 0.3s ease;
-    transform: translateY(-5px);
+    font-size: 24px; /* Larger font size */
+    font-weight: 600; /* Semi-bold font */
+    font-family: 'Poppins', sans-serif; /* Modern font */
+    color: #ffffff; /* White text */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Text shadow for depth */
+    margin: 10px 0 0; /* Spacing */
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transitions */
+    transform: translateY(-5px); /* Slight lift effect on hover */
 }
+
+.edit-field input {
+    min-width: 250px;
+}
+
 
 .profile-name:hover {
-    color: #ac640d;
-    transform: scale(1.05);
+    color: #ac640d; /* Change color on hover (e.g., yellow) */
+    transform: scale(1.05); /* Slight zoom effect on hover */
 }
-
 .p {
-    color: #ffdd58;
-    transform: scale(1.05);
+    color: #ffdd58; /* Change color on hover (e.g., yellow) */
+    transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
+/* Profile Box (Details and Buttons) */
 .profile-box {
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: #ffffff; /* White background */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Soft shadow */
     padding: 30px;
-    width: 500px;
+    width: 500px; /* Wider box */
     display: flex;
     justify-content: space-between;
     gap: 20px;
+
+
 }
 
 .profile-details {
@@ -478,13 +520,13 @@ body {
 }
 
 .detail-label {
-    font-weight: 600;
-    color: #555;
+    font-weight: 600; /* Semi-bold font */
+    color: #555; /* Medium gray text */
     font-size: 16px;
 }
 
 .detail-value {
-    color: #777;
+    color: #777; /* Light gray text */
     font-size: 16px;
 }
 
@@ -495,68 +537,72 @@ body {
     gap: 15px;
 }
 
+/* Button Styles with Animations */
 .btm {
     padding: 12px;
     border: none;
-    border-radius: 10px;
-    background-color: #007bff;
+    border-radius: 10px; /* Rounded corners */
+    background-color: #007bff; /* Blue button */
     color: white;
     cursor: pointer;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 500; /* Medium font weight */
     text-align: center;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    animation: float 3s ease-in-out infinite;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+    animation: float 3s ease-in-out infinite; /* Floating animation */
 }
 
 .btm:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Shadow on hover */
 }
 
+/* Floating Animation */
 @keyframes float {
     0%, 20% {
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-5px);
+        transform: translateY(-5px); /* Move up */
     }
 }
 
+/* Specific Button Colors */
 .disease-btn {
-    background-color: #28a745;
-    animation-delay: 0s;
+    background-color: #28a745; /* Green for Check Disease */
+    animation-delay: 0s; /* No delay */
 }
 
 .history-btn {
-    background-color: #ffc107;
-    animation-delay: 0.5s;
+    background-color: #ffc107; /* Yellow for View Consultation History */
+    animation-delay: 0.5s; /* Delay for staggered effect */
 }
 
 .feedback-btn {
-    background-color: #17a2b8;
-    animation-delay: 1s;
+    background-color: #17a2b8; /* Teal for Give Feedback */
+    animation-delay: 1s; /* Delay for staggered effect */
 }
 
 .chat-btn {
-    background-color: #dc3545;
-    animation-delay: 1.5s;
+    background-color: #dc3545; /* Red for Chat with Doctor */
+    animation-delay: 1.5s; /* Delay for staggered effect */
 }
-
+/* Additional Options Box */
 .options-box {
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    background: #ffffff; /* White background */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 20px; /* Reduced padding for compactness */
     width: 100%;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    max-width: 1200px; /* Increased width */
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 15px; /* Space between buttons */
     margin: 20px auto;
 }
 
+/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -564,21 +610,21 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
     padding-top: 20px;
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 20px;
-    width: 350px;
+    background: #ffffff; /* White background */
+    border-radius: 20px; /* Rounded corners */
+    padding: 20px; /* Reduced padding */
+    width: 350px; /* Adjust width if needed */
     position: relative;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    max-height: 80vh;
-    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    max-height: 80vh; /* Limit height to 80% of viewport height */
+    overflow-y: auto; /* Add scroll if content overflows */
 }
 
 .close {
@@ -587,7 +633,7 @@ body {
     right: 15px;
     font-size: 24px;
     cursor: pointer;
-    color: #555;
+    color: #555; /* Medium gray text */
 }
 
 .form-group {
@@ -597,48 +643,49 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #333;
-    font-weight: 500;
+    color: #333; /* Dark gray text */
+    font-weight: 500; /* Medium font weight */
 }
 
 .form-group input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 10px; /* Rounded corners */
     font-size: 16px;
 }
-
+/* Disease List Modal */
 #diseaseModal .modal-content {
-    width: 400px;
+    width: 400px; /* Wider modal for disease list */
     text-align: center;
 }
 
 .disease-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 10px; /* Space between disease buttons */
 }
 
 .disease-item {
     padding: 12px;
     border: none;
-    border-radius: 10px;
-    background-color: #007bff;
+    border-radius: 10px; /* Rounded corners */
+    background-color: #007bff; /* Blue button */
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 500; /* Medium font weight */
 }
 
 .disease-item:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow on hover */
 }
 
-/* Heart Disease Prediction Styles */
+/*heart*/
+
 .container3 {
     background: white;
     max-width: 400px;
@@ -648,33 +695,32 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.container3 h1 {
+h1 {
     color: #ff2e63;
 }
 
-.container3 p {
+p {
     color: #555;
 }
 
-.container3 form {
+form {
     display: flex;
     flex-direction: column;
 }
 
-.container3 label {
+label {
     font-weight: bold;
     margin-top: 10px;
 }
 
-.container3 input,
-.container3 select {
+input, select {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
     margin-top: 5px;
 }
 
-.container3 button {
+button {
     background: #ff2e63;
     color: white;
     border: none;
@@ -685,269 +731,259 @@ body {
     font-size: 16px;
 }
 
-.container3 button:hover {
+button:hover {
     background: #ff5e78;
 }
 
-.container3 h2 {
+h2 {
     margin-top: 20px;
     color: #222;
 }
 
-/* Risk Indicator Styles */
-.risk-indicator {
-    display: flex;
-    height: 30px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
+
+
+
+
+
+ .container5 {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .message {
+            background: #eafaf1;
+            border-left: 6px solid #27ae60;
+            padding: 25px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .specialists {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 35px;
+        }
+        .doctor-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .doctor-name {
+            color: #2c3e50;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .specialty {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .bton {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+        .bton:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+        }
+
+        .recovery-message {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 40px;
+            text-align: center;
+            border: 1px dashed #3498db;
+        }
+        .recovery-message h2 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .heart-icon {
+            color: #e74c3c;
+            font-size: 1.5em;
+            margin: 0 5px;
+        }
+
+
+
+
+
+.input-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+.input-table th, .input-table td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+}
+.input-table th {
+    background-color: #f5f5f5;
 }
 
-.risk-level {
-    flex: 1;
+/*Admin*/
+.profile-container1 {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 12px;
-    position: relative;
+    padding: 50px 30px;
+    background: linear-gradient(rgba(0, 0, 40, 0.7), rgba(0, 0, 40, 0.7)), url('../img/medi.jpg') no-repeat center/cover;
+    border-radius: 25px;
+    margin: 40px auto;
+    max-width: 1200px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    color: #fff;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeSlideIn 1s ease-out;
 }
-
-.risk-level.low {
-    background: #28a745;
-}
-
-.risk-level.medium {
-    background: #ffc107;
-}
-
-.risk-level.high {
-    background: #dc3545;
-}
-
-.threshold-marker {
-    position: absolute;
-    top: -5px;
-    width: 2px;
-    height: 40px;
-    background: black;
-    transform: translateX(-50%);
-}
-
-/* Results Page Styles */
-.container5 {
-    max-width: 1000px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    padding: 35px;
-    margin-top: 40px;
+.profile-header {
     text-align: center;
+    margin-bottom: 2.5rem;
 }
 
-.message {
-    background: #eafaf1;
-    border-left: 6px solid #27ae60;
-    padding: 25px;
-    border-radius: 12px;
-    font-size: 1.2em;
-    margin-bottom: 35px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+.profile-img-box {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #00c3ff;
+    box-shadow: 0 0 20px #00c3ff80;
+    transition: transform 0.3s ease;
 }
 
-.specialists {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-    margin-top: 35px;
+.profile-img-box:hover {
+    transform: scale(1.05);
 }
 
-.doctor-card {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.admin-name {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-top: 1rem;
+    background: linear-gradient(90deg, #00c3ff, #8e2de2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 2s ease-in-out infinite alternate;
 }
 
-.doctor-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+.admin-welcome {
+    font-size: 1.15rem;
+    color: #eaeaea;
+    margin-top: 0.5rem;
+    max-width: 750px;
+    line-height: 1.6;
 }
-
-.doctor-name {
-    color: #2c3e50;
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.specialty {
-    color: #e74c3c;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.bton {
-    display: inline-block;
-    background: #e74c3c;
-    color: white;
-    padding: 12px 22px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-size: 1em;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-}
-
-.bton:hover {
-    background: #c0392b;
-    transform: translateY(-3px);
-}
-
-.recovery-message {
-    background: #f0f8ff;
-    border-radius: 10px;
-    padding: 25px;
+.future-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     margin-top: 40px;
-    text-align: center;
-    border: 1px dashed #3498db;
 }
 
-.recovery-message h2 {
-    color: #3498db;
-    margin-top: 0;
-}
-
-.heart-icon {
-    color: #e74c3c;
-    font-size: 1.5em;
-    margin: 0 5px;
-}
-
-/* ===== Critical Heart Risk Page Styles ===== */
-.risk-report-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    border-radius: 8px;
-}
-
-.risk-summary {
+.section-title {
+    font-size: 2rem;
+    color: #00d4ff;
     text-align: center;
     margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+.future-block {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    transition: background 0.3s;
+    border-left: 5px solid #00c3ff;
 }
 
-.display-4 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #dc3545;
-    margin-bottom: 0.5rem;
+.future-block:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.badge-danger {
-    background-color: #dc3545;
+.future-block h3 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.future-block ul li {
+    color: #e0e0e0;
     font-size: 1.1rem;
-    padding: 0.5rem 1rem;
-}
-
-.card {
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.card-header {
-    font-weight: 600;
-    padding: 1rem 1.5rem;
-}
-
-.card-body {
-    padding: 1.5rem;
-}
-
-.list-group-item {
-    padding: 1rem 1.5rem;
-    border-left: 4px solid #dc3545;
-    margin-bottom: 0.5rem;
-    transition: all 0.3s ease;
-}
-
-.list-group-item-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-left: 4px solid #dc3545;
-}
-
-.list-group-item:hover {
-    background-color: #f8f9fa;
-    transform: translateX(5px);
-}
-
-ol {
-    padding-left: 1.5rem;
-}
-
-ol li {
     margin-bottom: 0.8rem;
-    padding-left: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
 }
 
-.fas {
-    margin-right: 0.5rem;
+.future-block ul li::before {
+    content: '✔️';
+    position: absolute;
+    left: 0;
+    color: #00ffae;
+}
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Responsive adjustments */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #00c3ff, 0 0 20px #00c3ff;
+    }
+    to {
+        text-shadow: 0 0 20px #8e2de2, 0 0 30px #8e2de2;
+    }
+}
 @media (max-width: 768px) {
-    .profile-container {
-        flex-direction: column;
-        align-items: center;
+    .profile-container1 {
+        padding: 30px 15px;
     }
 
-    .circle-box, .profile-box {
-        width: 100%;
+    .admin-name {
+        font-size: 2rem;
     }
 
-    .signin-options {
-        flex-direction: column;
-        gap: 20px;
+    .future-block h3 {
+        font-size: 1.2rem;
     }
 
-    .container3 {
-        max-width: 90%;
-        padding: 20px;
-    }
-
-    .container5 {
-        padding: 20px;
-    }
-
-    .specialists {
-        grid-template-columns: 1fr;
-    }
-
-    /* Critical Heart Risk Page Responsive */
-    .risk-report-container {
-        padding: 1rem;
-        margin: 1rem;
-    }
-
-    .display-4 {
-        font-size: 2.5rem;
-    }
-
-    .card-body, .card-header {
-        padding: 1rem;
+    .future-block ul li {
+        font-size: 1rem;
     }
 }
+
