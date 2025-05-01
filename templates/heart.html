@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}Heart Disease Prediction{% endblock title %}
 {% block body %}
+<style>
+ @media print {
+            .navbar, .specialists, .submit {
+                display: none !important;
+            }
+        }
+ </style>
 
 <div class="container3" >
     <h1>❤️ Heart Disease Prediction</h1>
@@ -73,6 +80,7 @@
         </select>
 
         <button type="submit">🔍 Predict</button>
+        <button type="submit" onclick="window.print()">Print</button>
     </form>
 
     <div id="loading" style="display: none;">

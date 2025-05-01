@@ -1,7 +1,6 @@
 import datetime
 import pandas as pd
-
-from flask import Flask, render_template, request, redirect, session, flash, url_for,request,send_from_directory,jsonify
+from flask import Flask, render_template, request, redirect, session, flash, url_for, request, send_from_directory, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -10,22 +9,27 @@ from datetime import timedelta
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
-
-
-
+from functools import wraps
+from flask import make_response
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/docify'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production (HTTPS)
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
+login_manager.init_app(app)
 login_manager.login_view = 'signin'
+
+
+
 
 class User(db.Model, UserMixin):
     email = db.Column(db.String(50), primary_key=True)  # Increase length for email
@@ -39,8 +43,6 @@ class User(db.Model, UserMixin):
         self.password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=16)
         print(f"Debug: Hashed password = {self.password}")  # Debugging
 
-
-
     def check_password(self, password):
         print(f"Debug: Comparing plaintext password = {password} with hashed password = {self.password}")  # Debugging
         is_correct = check_password_hash(self.password, password)
@@ -50,10 +52,6 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.email
 
-@login_manager.user_loader
-def load_user(email):
-    print(f"Debug: Loading user with email = {email}")  # Debugging
-    return User.query.get(email)
 
 class PatientDetails(db.Model):
     p_id = db.Column(db.Integer, primary_key=True)
@@ -66,6 +64,7 @@ class PatientDetails(db.Model):
     report_path = db.Column(db.String(255))
     report_filename = db.Column(db.String(255))
 
+
 class DoctorDetails(db.Model):
     d_id = db.Column(db.Integer, primary_key=True)
     d_email = db.Column(db.String(50), db.ForeignKey('user.email'), nullable=False)
@@ -77,15 +76,47 @@ class DoctorDetails(db.Model):
     license_path = db.Column(db.String(255))
     photo_path = db.Column(db.String(255))
 
+
+class Appointment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    doctor_email = db.Column(db.String(50), db.ForeignKey('doctor_details.d_email'), nullable=False)
+    patient_email = db.Column(db.String(50), db.ForeignKey('patient_details.p_email'), nullable=False)
+    appointment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    status = db.Column(db.String(20), default='Scheduled')  # Scheduled, Completed, Cancelled
+    notes = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+@login_manager.user_loader
+def load_user(email):
+    print(f"Debug: Loading user with email = {email}")  # Debugging
+    return User.query.get(email)
+
+
+
+def nocache(view):
+    @wraps(view)
+    def no_cache_view(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+
+    return no_cache_view
+
+
 @app.route("/")
 def theme():
     return render_template('theme.html', redirect_url='index', timeout=2000)
 
+
 @app.route("/index")
 def index():
+    session.clear()
     return render_template('index.html')
 
-#from models import DoctorDetails, PatientDetails  # import if needed
+
+# from models import DoctorDetails, PatientDetails  # import if needed
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -149,6 +180,7 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
 
+
 @app.route("/signin", methods=["GET", "POST"])
 def signin():
     if request.method == "POST":
@@ -202,16 +234,24 @@ def signin():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html',admin_page=True)
+    return render_template('admin.html', admin_page=True)
 
 
+def nocache(view):
+    @wraps(view)
+    def no_cache_view(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
 
-
-
+    return no_cache_view
 
 
 @app.route("/patient", methods=['GET', 'POST'])
 @login_required
+@nocache
 def patient():
     if current_user.u_type.lower() != 'patient':  # Case-insensitive comparison
         flash('You do not have access to this page.', 'error')
@@ -232,11 +272,13 @@ def patient():
         db.session.add(patient_details)
         db.session.commit()
 
-    return render_template('patient.html', patient=patient_details )
+    return render_template('patient.html', patient=patient_details)
+
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/update_patient', methods=['POST'])
 @login_required
@@ -312,29 +354,28 @@ def view_report(patient_email):
 
 @app.route('/doctor', methods=['GET', 'POST'])
 @login_required
+@nocache
 def doctor():
     if current_user.u_type.lower() != 'doctor':
         flash('Access denied', 'error')
         return redirect(url_for('signin'))
 
-    # Proper boolean handling from query params
-    booked = request.args.get('booked', 'false').lower() == 'true'
-    patient_email = request.args.get('patient_email')
+        # Get all appointments for this doctor
+    appointments = Appointment.query.filter_by(
+        doctor_email=current_user.email
+    ).order_by(Appointment.appointment_date.desc()).all()
 
-    # Enhanced debug prints
-    print(f"DEBUG - Booked: {booked} (type: {type(booked)}), Patient Email: {patient_email}")
+    # Get the most recent booked appointment if any
+    booked_appointment = None
+    if appointments:
+        booked_appointment = appointments[0]  # Get the most recent
 
     doctor = DoctorDetails.query.filter_by(d_email=current_user.email).first()
 
-    patient = None
-    if booked and patient_email:
-        patient = PatientDetails.query.filter_by(p_email=patient_email).first()
-        print(f"DEBUG - Patient found: {patient is not None}, Email: {patient_email}")
-
     return render_template('doctor.html',
-                         doctor=doctor,
-                         patient=patient,
-                         booked=booked)
+                           doctor=doctor,
+                           appointments=appointments,
+                           PatientDetails=PatientDetails)
 
 
 @app.route('/update_doctor', methods=['POST'])
@@ -391,7 +432,6 @@ def update_doctor():
     return redirect(url_for('doctor'))
 
 
-
 @app.route('/view_license/<doctor_email>')
 @login_required
 def view_license(doctor_email):
@@ -434,7 +474,6 @@ def view_photo(doctor_email):
 def get_cardiologists():
     specialty = request.args.get('specialist', 'Heart')  # ✅ FIXED
 
-
     doctors = DoctorDetails.query.filter(DoctorDetails.specialist.ilike(f"%{specialty}%")).all()
 
     doctor_list = [
@@ -450,9 +489,6 @@ def get_cardiologists():
     return jsonify(doctor_list)
 
 
-
-
-
 @app.route("/login")
 def login():
     return render_template('login.html')
@@ -466,9 +502,11 @@ from flask_wtf.csrf import generate_csrf
 def heart():
     return render_template('heart.html')
 
+
 # Load heart disease prediction model and scaler
 try:
     import pickle
+
     with open("model/heart_model.pkl", "rb") as f:
         heart_model = pickle.load(f)
     with open("model/scaler.pkl", "rb") as f:
@@ -572,7 +610,7 @@ def predict():
         # Store in session for the result pages
         session['heart_prediction'] = result
 
-         # Log prediction for analytics (optional)
+        # Log prediction for analytics (optional)
         # log_prediction(current_user_id, input_data, result)
 
         print(f"✅ Prediction complete - Risk: {risk_level} ({probability}%)")
@@ -656,39 +694,52 @@ def book_appointment():
         doctor_email = data.get('doctor_email')
         patient_email = current_user.email
 
-        print(f"DEBUG - Booking attempt - Doctor: {doctor_email}, Patient: {patient_email}")
+        # Check if appointment already exists
+        existing_appointment = Appointment.query.filter_by(
+            doctor_email=doctor_email,
+            patient_email=patient_email,
+            status='Scheduled'
+        ).first()
+
+        if existing_appointment:
+            return jsonify({
+                'success': False,
+                'message': 'You already have a pending appointment with this doctor'
+            }), 400
+
+        # Create new appointment
+        new_appointment = Appointment(
+            doctor_email=doctor_email,
+            patient_email=patient_email,
+            appointment_date=datetime.utcnow() + timedelta(days=1),  # Default to tomorrow
+            status='Scheduled'
+        )
+
+        db.session.add(new_appointment)
+        db.session.commit()
 
         doctor = DoctorDetails.query.filter_by(d_email=doctor_email).first()
         patient = PatientDetails.query.filter_by(p_email=patient_email).first()
 
-        if not doctor:
-            print("DEBUG - Doctor not found")
-            return jsonify({'success': False, 'message': 'Doctor not found'}), 404
-        if not patient:
-            print("DEBUG - Patient not found")
-            return jsonify({'success': False, 'message': 'Patient profile not complete'}), 404
-
-        print("DEBUG - Preparing redirect URL")
-
-        # ✅ Include doctor_name in response
         return jsonify({
             'success': True,
             'redirect_url': url_for('doctor',
-                                    booked='true',
-                                    patient_email=patient_email,
-                                    _external=True),
+                                  booked='true',
+                                  patient_email=patient_email,
+                                  _external=True),
             'message': 'Appointment booked successfully',
-            'doctor_name': doctor.d_name  # <-- This ensures JS gets the name
+            'doctor_name': doctor.d_name,
+            'appointment_id': new_appointment.id
         })
 
     except Exception as e:
+        db.session.rollback()
         print(f"ERROR in book_appointment: {str(e)}")
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
-
 if __name__ == '__main__':
     with app.app_context():
-        db.drop_all()  # Drop all tables (use with caution in production)
+        #  db.drop_all()  # Drop all tables (use with caution in production)
         db.create_all()  # Recreate all tables based on the current models
     app.run(debug=True)

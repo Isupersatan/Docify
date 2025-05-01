@@ -125,6 +125,8 @@ body {
     line-height: 1.6;
     max-width: 900px;
     margin: 0 auto 2rem;
+    color: #d0f0ff; /* Icy soft blue - looks very premium */
+
 }
 
 .hero-section .btn {
@@ -141,7 +143,7 @@ body {
 .hero-section .btn:hover {
     background-color: #3300ff;
     transform: scale(1.05);
-    
+
 }
 
 /* Container and Form Styling for Login/Signup (login.html) */
@@ -986,4 +988,6 @@ h2 {
         font-size: 1rem;
     }
 }
+
+
 

@@ -4,25 +4,27 @@
 
 {% block body %}
 <style>
-    /* Add these styles to your existing CSS */
-    .appointment-confirmation {
+    .appointment-card {
+        border-left: 4px solid #0d6efd;
+        transition: all 0.3s ease;
+    }
+
+    .appointment-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .patient-info {
         background-color: #f8f9fa;
-        border-left: 4px solid #28a745;
-        padding: 20px;
-        margin-top: 30px;
+        padding: 10px;
         border-radius: 5px;
     }
 
-    .patient-details p {
-        margin: 8px 0;
-    }
-
-    .debug-info {
-        background-color: #fff3cd;
-        padding: 10px;
-        margin: 10px 0;
-        border-left: 4px solid #ffc107;
-        font-family: monospace;
+    .appointments-section {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 </style>
 <div class="profil">
@@ -84,9 +86,9 @@
 
 <div class="options-box">
    <button class="btm cirtififate-btn" onclick="viewCertificate('{{ doctor.d_email }}')">View Your Certificate</button>
-    <button class="btm history-btn">View Consultation History</button>
-    <button class="btm feedback-btn">Give Feedback</button>
-    <button class="btm chat-btn">Chat with Patient</button>
+<!--    <button class="btm history-btn">View Consultation History</button>-->
+<!--    <button class="btm feedback-btn">Give Feedback</button>-->
+<!--    <button class="btm chat-btn">Chat with Patient</button>-->
 </div>
 
 
@@ -101,45 +103,41 @@
         <p><strong>URL Parameters:</strong> {{ request.args }}</p>
     </div>
 -->
-    <!-- Enhanced Appointment Confirmation -->
-    {% if booked and patient %}
-    <div class="appointment-confirmation">
-        <div class="d-flex justify-content-between align-items-center">
-            <h3><i class="fas fa-calendar-check me-2"></i> Appointment Confirmed</h3>
-            <span class="badge bg-success">New</span>
-        </div>
+    <!-- Appointments Section -->
+<div class="appointments-section mt-5">
+    <h3><i class="fas fa-calendar-alt me-2"></i> Your Appointments</h3>
 
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <h4><i class="fas fa-user me-2"></i> Patient Details</h4>
-                <div class="patient-details">
-                    <p><strong>Name:</strong> {{ patient.p_name }}</p>
-                    <p><strong>Email:</strong> {{ patient.p_email }}</p>
+    {% if appointments %}
+    <div class="appointments-list mt-3">
+        {% for appointment in appointments %}
+        <div class="appointment-card card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title">
+                        Appointment #{{ appointment.id }}
+                        <span class="badge bg-{{ 'success' if appointment.status == 'Scheduled' else 'secondary' }}">
+                            {{ appointment.status }}
+                        </span>
+                    </h5>
+                    <small class="text-muted">{{ appointment.appointment_date.strftime('%b %d, %Y %I:%M %p') }}</small>
+                </div>
+
+                <div class="patient-info mt-2">
+                    {% set patient = PatientDetails.query.filter_by(p_email=appointment.patient_email).first() %}
+                    <p><strong>Patient:</strong> {{ patient.p_name }}</p>
+                    <p><strong>Email:</strong> {{ appointment.patient_email }}</p>
                     <p><strong>Age:</strong> {{ patient.p_age }}</p>
-                    {% if patient.weight %}
-                    <p><strong>Weight:</strong> {{ patient.weight }} kg</p>
-                    {% endif %}
-                    {% if patient.height %}
-                    <p><strong>Height:</strong> {{ patient.height }} cm</p>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h4><i class="fas fa-clock me-2"></i> Appointment Time</h4>
-                <p>Today at {{ now().strftime('%I:%M %p') }}</p>
-
-                <div class="mt-3">
-                    <button class="btn btn-outline-primary">
-                        <i class="fas fa-envelope me-2"></i> Send Reminder
-                    </button>
-                    <button class="btn btn-outline-secondary ms-2">
-                        <i class="fas fa-print me-2"></i> Print Details
-                    </button>
                 </div>
             </div>
         </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info mt-3">
+        <i class="fas fa-info-circle me-2"></i> You have no upcoming appointments.
     </div>
     {% endif %}
+</div>
 
     <!-- Edit Profile Modal -->
     <div id="editProfileModal" class="modal hidden">
